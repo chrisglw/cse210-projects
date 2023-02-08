@@ -14,10 +14,14 @@ public class Program
         while (userChoice != 5) {
             menu.DisplayMenu();
             string MenuChoice = Console.ReadLine() ?? "5";
-            userChoice = int.Parse(MenuChoice);
+            if (!int.TryParse(MenuChoice, out userChoice) || userChoice < 1 || userChoice > 5) {
+                Console.WriteLine("That option is not available. Please try an option from 1 to 5.");
+                Console.WriteLine();
+                continue;
+            }
             if (userChoice == 1) {
                 var newPrompt = prompt.RandomPrompt();
-                Console.WriteLine(newPrompt);
+                Console.Write($"{newPrompt}\n> ");
                 string userInput = Console.ReadLine() ?? "";
                 journal.NewEntry(newPrompt, userInput);
             }
@@ -54,7 +58,7 @@ public class Menu{
 public class Prompt {
     List<string> prompts = new List<string>();
     public Prompt(){
-        prompts.Add("How are you feeling? ");
+        prompts.Add("""How are you feeling? """);
         prompts.Add("Were you nice today? ");
         prompts.Add("What was the best thing that happened to you today? ");
         prompts.Add("What could you have done better today? ");
@@ -118,6 +122,10 @@ public class Entry {
 
     public Entry()
     {
+        DateTime theCurrentTime = DateTime.Now;
+        date = theCurrentTime.ToShortDateString();
+        // string date = theCurrentTime.ToShortDateString();
+        // DateTime theCurrentTime = DateTime.Now;
         // string date = theCurrentTime.ToShortDateString();
     }
     public void Display() {
